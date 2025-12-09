@@ -1,0 +1,45 @@
+---
+title: "4_laboratorinis"
+authors: "Arina Vysockaja, Marija Sergejeva, Ignas Virbalas"
+output: pdf_document
+date: "2025-12-09"
+---
+
+```{r echo=FALSE, warning=FALSE, include = FALSE}
+# Uzkrauname paketus
+# echo = FALSE -- nurodo, kad kodas nespausdinamas ataskaitoje, bet spausdinami rezultatai
+# warning = FALSE -- nurodo, kad warnings nespausdinami ataskaitoje
+# include = FALSE -- nurodo, kad nei kodas nei rezultatai nespausdinami ataskaitoje
+library(WDI)
+library(dplyr)
+library(ggplot2)
+library(GGally)
+```
+
+```{r setup, include=FALSE} 
+# Alternatyvus budas nuimti warningsus visame dokumente:
+# 
+# https://stackoverflow.com/questions/45399587/how-to-remove-warning-messages-in-r-markdown-document
+# 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) #sueikia formule ir nespausidina warningu i console
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
