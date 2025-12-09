@@ -1,6 +1,6 @@
 ---
-title: "4_laboratorinis"
-authors: "Arina Vysockaja, Marija Sergejeva, Ignas Virbalas"
+title: "Mokslinio straipsnio analizė"
+author: "Arina Vysockaja, Marija Sergejeva, Ignas Virbalas"
 output: pdf_document
 date: "2025-12-09"
 ---
@@ -23,23 +23,114 @@ library(GGally)
 # 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) #sueikia formule ir nespausidina warningu i console
 ```
+# Nagrinėjamo straipsnio aprašymas
 
-## R Markdown
+## Pavadinimas
+“Impact of energy consumption and economic growth on CO2 emission using multivariate regression”
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Nuoroda į straipsnį
+https://www.sciencedirect.com/science/article/pii/S2211467X19301208
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Straipsnio autoriai
+Mostafa K. Ardakani, Seyed Mohsen Seyedaliakbar
 
-```{r cars}
-summary(cars)
-```
+## Žurnalo pavadinimas
+Energy Strategy Reviews, Volume 26, 2019.
+Nuoroda į žurnalą: https://www.sciencedirect.com/journal/energy-strategy-reviews/vol/26/suppl/C.  
 
-## Including Plots
+---
 
-You can also embed plots, for example:
+# Tyrimo tikslai: 
+- Ištirti sąryšį tarp energijos suvartojimo, ekonominio augimo ir CO2 emisijos EKC kontekste naudojant multivariacinę regresijos metodiką.
+- Tyrime analizuojamos septynios valstybės Vidurio Rytų ir Šiaurės Afrikos regione, kurios pasižymi gausiais naftos ištekliais. 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+## Tyrimo uždaviniai:  
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+- Panaudoti multivariacinę tiesinę regresijos metodika tam, kad būtų patvirtinta EKC hipotezė atliekamo tyrimo kontekste.  
+- Pateikti atlikto tyrimo išvadas ir pasiūlymus remiantis gautais rezultatais.  
+
+## Straipsnio tyrime naudoti duomenys:
+- Duomenys surinkti iš World Bank Development Indicators, WDI. Filtruotas 1995 – 2014 metų laikotarpis, atrinktos 7 valstybės: Alžyras, Bahrainas, Iranas, Kuveitas, Omanas, Kataras ir Saudo Arabija. Pasirinkti valstybių kintamieji nurodytam periodui: CO2 emisijos (metrinės tonos vienam gyventojui), elektros energijos suvartojimas EPC (kWh vienam gyventojui) ir BVP vienam gyventojui (US$).  
+
+## Mokslinio straipsnio autorių atliktos analizės metodai:  
+
+---
+
+### Modelio formulavimas ir diskriptyvinė analizė
+
+Moksliniame straipsnyje, naudojant duomenis iš WDI duomenų bazės, CO$_2$ išmetimui taikoma tokia kvadratinė lygtis (kvadratinė regresija):
+\[
+\ln(\text{CO}_{2,it}) = b_{0i} + b_{1i} \cdot \ln(\text{EPC}_{it}) + b_{2i} \cdot \ln(\text{GDP}_{it}) + b_{3i} \cdot \left[\ln(\text{GDP}_{it})\right]^2 + \varepsilon_{it}
+\]
+EKC hipotezė tirta naudojant scenarijus, susijusius su BVP ir CO$_2$ išmetimu:
+
+- (a) kai $b_{2i} \neq 0$ ir $b_{3i} < 0$  
+  (gaunamas apverstas U formos ryšys tarp BVP ir CO$_2$ išmetimų)
+
+- (b) kai $b_{2i} \neq 0$ ir $b_{3i} > 0$  
+  (gaunamas U formos ryšys tarp BVP ir CO$_2$ išmetimų)
+
+(a) atveju emisijos didėja iki tam tikro pajamų lygio (lūžio taško: $-\frac{0.5 b_{2i}}{b_{3i}}$), o vėliau mažėja.  
+(b) atveju – atvirkščiai.
+
+Diskriptyvinei analizei panaudota lentelė su duomenų padėties charakteristikomis (vidurkis, standartinis nuokrypis, maksimalios ir minimalios reikšmės), boxplot, scatter, time series grafikai ir histogramos.  
+
+Lentelės rodo didelius skirtumus tarp šalių energijos vartojimo ir CO$_2$ emisijų (pagal vidurkius išsiskiria Bahreinas ir Kataras dėl savo didelių EPC ir CO$_2$ lygių).  
+
+Iš boxplot grafikų galima pastebėti, kad didesni EPC ir BVP rodikliai paprastai lemia CO$_2$ padidėjimą.  
+
+Laiko eilučių grafikuose vaizduojami $LnCO_2$, $LnEPC$ ir $LnGDP$ kiekvienoje šalyje 1995–2014 m. Pastebima 2008 m. recesija visose šalyse, tačiau bendros išvados, tenkinančios visas šalis, padaryti negalima dėl skirtingų CO$_2$ augimo tendencijų.
+
+---
+
+### Daugiamatė regresinė analizė
+
+Tiriant CO$_2$ emisijos ryšį su vienam gyventojui tenkančiu energijos suvartojimu, BVP ir $BVP^2$, septynioms MENA šalims 1995–2014 m. taikoma daugiamatė tiesinė regresija.  
+
+Aiškinamieji kintamieji: $LnEPC$, $LnGDP$, $(LnGDP)^2$.  
+Modelio tinkamumas: $R^2 = 0.99$, $F = 545$, vidutinė santykinė paklaida 1.8–4.7 %.  
+
+Šalys suskirstytos:
+- U formos kategorija: Alžyras, Bahreinas.  
+- Apverstos U formos kategorija (patvirtinta EKC hipotezė): Omanas, Kataras, Saudo Arabija.  
+- Neapibrėžti rezultatai: Iranas, Kuveitas.
+
+---
+
+### Daugiamatės regresijos prielaidos: 
+
+Autoriai tikrina šias prielaidas: daugiamatį normalumą, autokoreliaciją, homoskedastiškumą ir kolineariškumą. Visi testai yra atlikti grafiškai.  
+
+## Straipsnio tyrimo išvados:  
+
+Apibendrinus, straipsnio autoriai pastebi, jog Omanas, Kataras ir Saudo Arabija skaičiavimų eigoje įgauna apverstos U-formos kreives. Šioms valstybėms turint mažesnę GDP reikšmę, nei jų lūžio taškas, ekonominis augimas lemia didesnes Co2 emisijas, tačiau GDP reikšmei tapus aukštesnei nei lūžio taško reikšmei – aplinkos kokybė gerėja kartu su ekonominiu augimu. Alžyras ir Bahreinas tyrimo eigoje įgauna U-formos kreives. Tai reiškia, kad GDP reikšmei tapus aukštesnei, nei jos lūžio taškas, ekonominis augimas lemia didesnes Co2 emisijas. Atitinkamai, straipsnio autoriai siūlo tinkamos ekonomikos ir socialinės politikos taikymą šioms valstybėms tam, kad būtų sumažintos Co2 emisijos, tuo pačiu metu gerinant ekonomikos augimą. Taip pat, rezultatai Iranui ir Kuveitui yra neapibrėžti. Šiuo atveju, straipsnio autoriai rekomenduoja pakeisti taikomus statistinius metodus, arba itraukti papildomus nepriklausomus kintamuosius, kurie suteiktų galimybę gauti tikslesnį rezultatą. 
+
+---
+
+# Darbas: 
+
+Nagrinėti duomenys:  
+
+Šaltinis: World Bank Development Indicators, WDI. Duomenys iš WDI buvo tiesiogiai įkelti į R aplinką naudojant WDI paketą. 
+
+Struktūra: Surinkti duomenys apima 7 valstybes: Alžyrą, Bahreiną, Iraną, Kuveitą, Omaną, Katarą ir Saudo Arabiją. Filtruotas laikotarpis: 1995-2014 metai. Pasirinkti kintamieji: GDP per capita (current US), Carbon dioxide (CO2) emissions excluding LULUCF per capita (t CO2ecapita), Electric power consumption (kWh per capita). Kiekviena eilutė atitinka šalį ir konkretų laikotarpį. 
+
+Dažnis: Metiniai duomenys. 
+
+Reikšmių matavimai:  
+
+GDP per capita (current US$) – matuojamas JAV doleriais vienam žmogui. 
+
+Carbon dioxide (CO2) emissions excluding LULUCF (Land use, Land-use change and Forestry) per capita (t CO2e/capita) – CO2 emisijos, atskaičius žemės naudojimą, žemės naudojimo pokyčius ir miškininkystę, matuojamos tonomis vienam žmogui. Pasirinkome šį rodiklį, todėl nes WDI nebeteikia galimybės naudoti paprasto CO2 per capita rodiklio. 
+
+Electric power consumption (kWh per capita) – Elektros energijos suvartojimas, matuojamas kilovatvalandėmis vienam gyventojui. 
+
+Taikyti statistiniai metodai: 
+
+Duomenų reikšmių pavertimas į natūrinio logaritmo reikšmes, taikytos empirinės charakteristikos (standartinis nuokrypis, mediana, min, max), atlikta išskirčių analizė (nubraižyti boxplot grafikai), nubraižyti trend, scatterplot grafikai. 
+
+---
+
+# Išvados: 
+
+Pastebime, jog gauti atlikto darbo rezultatai turi panašumų su straipsnio autorių diskriptyvinės analizės metu gautais rezultatais: standartinio nuokrypio, vidurkio, min, max  reikšmės daugelyje vietų sutampa, boxplot grafikai atitinka straipsnio grafikus.
