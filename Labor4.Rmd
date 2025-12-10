@@ -127,10 +127,152 @@ Electric power consumption (kWh per capita) – Elektros energijos suvartojimas,
 
 Taikyti statistiniai metodai: 
 
-Duomenų reikšmių pavertimas į natūrinio logaritmo reikšmes, taikytos empirinės charakteristikos (standartinis nuokrypis, mediana, min, max), atlikta išskirčių analizė (nubraižyti boxplot grafikai), nubraižyti trend, scatterplot grafikai. 
+Duomenų reikšmių pavertimas į natūrinio logaritmo reikšmes, taikytos empirinės charakteristikos (standartinis nuokrypis, mediana, min, max), atlikta išskirčių analizė (nubraižyti boxplot grafikai), nubraižyti trend, scatterplot grafikai.
 
+```{r, echo=FALSE} 
+MENA <- WDI(country = c('DZ', 'BH', 'IR', 'KW', 'OM', 'QA', 'SA'), indicator = c("EN.GHG.CO2.PC.CE.AR5", "NY.GDP.PCAP.CD", "EG.USE.ELEC.KH.PC"), start = 1995, end = 2014)
+MENA <- rename(MENA, 'CO2 emission' =	'EN.GHG.CO2.PC.CE.AR5' , 'GDP per capita' = 'NY.GDP.PCAP.CD', 'EPC - Electric Power Consumption' = 'EG.USE.ELEC.KH.PC')
+MENA <- select(MENA, country, year, `CO2 emission`, `GDP per capita`, `EPC - Electric Power Consumption`)
+```
+
+Grafikai:
+  
+```{r, echo=FALSE} 
+empir <- MENA %>%
+  mutate(`Ln(CO2)` = log(`CO2 emission`), `Ln(EPC)` = log(`EPC - Electric Power Consumption`), `Ln(GDP)` = log(`GDP per capita`))%>%
+  group_by(country) %>%
+  summarise(
+    mean_LnCO2 = round(mean(`Ln(CO2)`), 2),
+    std_LnCO2 = round(sd(`Ln(CO2)`), 2),
+    min_LnCO2 = round(min(`Ln(CO2)`), 2),
+    max_LnCO2 = round(max(`Ln(CO2)`), 2),
+    
+    mean_LnEPC = round(mean(`Ln(EPC)`), 2),
+    std_LnEPC = round(sd(`Ln(EPC)`), 2),
+    min_LnEPC = round(min(`Ln(EPC)`),2),
+    max_LnEPC = round(max(`Ln(EPC)`), 2),
+    
+    mean_LnGDP = round(mean(`Ln(GDP)`), 2),
+    std_LnGDP = round(sd(`Ln(GDP)`), 2),
+    min_LnGDP = round(min(`Ln(GDP)`), 2),
+    max_LnGDP = round(max(`Ln(GDP)`), 2)
+  )
+```
+
+```{r fig.height=4, fig.width=6, echo=FALSE}
+knitr::kable(empir, caption = "MENA šalių diskriptyvinė analizė")
+```
+
+```{r fig.height=4, fig.width=6, echo=FALSE}
+MENA <- mutate(MENA, `Ln(CO2)` = log(`CO2 emission`), `Ln(EPC)` = log(`EPC - Electric Power Consumption`), `Ln(GDP)` = log(`GDP per capita`))
+bxplt_CO2 <- ggplot(MENA, mapping = aes(x = country, y = `Ln(CO2)`))+
+  geom_boxplot(
+    color = 'blue',
+    fill = 'white',
+    outlier.colour = 'red',
+    outlier.shape = 3,
+    outlier.size = 2
+    )+
+  labs(
+    x = "Country",
+    y = "Ln(CO2)",
+    title = "Natūralusis logaritmas nuo CO2 emisiju"
+  )+
+  theme_classic()
+bxplt_CO2
+```
+
+```{r fig.height=4, fig.width=6, echo=FALSE}
+bxplt_EPC <- ggplot(MENA, mapping = aes(x = country, y = `Ln(EPC)`))+
+  geom_boxplot(
+    color = 'blue',
+    fill = 'white',
+    outlier.colour = 'red',
+    outlier.shape = 3,
+    outlier.size = 2
+  )+
+  labs(
+    x = 'Country',
+    y = 'Ln(EPC)',
+    title = 'Natūralusis logaritmas nuo Elektros energijos suvartojimo'
+  )+
+  theme_minimal()
+bxplt_EPC
+```
+
+```{r fig.height=4, fig.width=6, echo=FALSE}
+bxplt_GDP <- ggplot(MENA, mapping = aes(x = country, y = `Ln(GDP)`))+
+  geom_boxplot(
+    color = 'blue',
+    fill = 'white',
+    outlier.colour = 'red',
+    outlier.shape = 3,
+    outlier.size = 2
+  )+
+  labs(
+    x = 'Country',
+    y = 'Ln(GDP)',
+    title = 'Natūralusis logaritmas nuo BVP'
+  )+
+  theme_minimal()
+bxplt_GDP
+```
+
+```{r fig.height=4, fig.width=6, echo=FALSE}
+pasiskirst_CO2 <- ggplot(MENA, mapping = aes(x = year, y = `Ln(CO2)`, shape = country))+
+  geom_point()+
+  scale_shape_manual(values = c(1, 2, 3, 4, 5, 6, 7)) +
+  labs(
+    x = 'year',
+    y = 'Ln(CO2)',
+    title = 'Naturalusis logaritmas nuo CO2 emisiju pagal metus'
+  )
+pasiskirst_CO2
+```
+
+```{r fig.height=4, fig.width=6, echo=FALSE}
+pasiskirst_EPC <- ggplot(MENA, mapping = aes(x = year, y = `Ln(EPC)`, shape = country))+
+  geom_point()+
+  scale_shape_manual(values = c(1, 2, 3, 4, 5, 6, 7)) +
+  labs(
+    x = 'year',
+    y = 'Ln(EPC)',
+    title = 'Naturalusis logaritmas nuo Elektros enersijos suvartojimo pagal metus'
+  )
+pasiskirst_EPC
+```
+
+```{r fig.height=4, fig.width=6, echo=FALSE}
+pasiskirst_GDP <- ggplot(MENA, mapping = aes(x = year, y = `Ln(GDP)`, shape = country))+
+  geom_point()+
+  scale_shape_manual(values = c(1, 2, 3, 4, 5, 6, 7)) +
+  labs(
+    x = 'year',
+    y = 'Ln(GDP)',
+    title = 'Naturalusis logaritmas nuo BVP pagal metus'
+  )
+pasiskirst_GDP
+```
+
+```{r fig.height=4, fig.width=6, echo=FALSE}
+ggplot(MENA, mapping = aes(x = `Ln(EPC)`, y = `Ln(CO2)`))+
+  geom_point()+
+  labs(
+    y = 'CO2 emissions'
+  )
+```
+
+```{r fig.height=4, fig.width=6, echo=FALSE}
+ggplot(MENA, mapping = aes(x = `Ln(GDP)`, y = `Ln(CO2)`))+
+  geom_point()+
+  labs(
+    y = 'CO2 emissions'
+  )
+
+```
 ---
 
 # Išvados: 
 
-Pastebime, jog gauti atlikto darbo rezultatai turi panašumų su straipsnio autorių diskriptyvinės analizės metu gautais rezultatais: standartinio nuokrypio, vidurkio, min, max  reikšmės daugelyje vietų sutampa, boxplot grafikai atitinka straipsnio grafikus.
+Pastebime, jog gauti atlikto darbo rezultatai turi panašumų su straipsnio autorių diskriptyvinės analizės metu gautais rezultatais: standartinio nuokrypio, vidurkio, min, max
+reikšmės daugelyje vietų sutampa, boxplot grafikai atitinka straipsnio grafikus.
