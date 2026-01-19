@@ -1,0 +1,507 @@
+---
+title: "Mokslinio straipsnio analizė"
+author: "Arina Vysockaja, Marija Sergejeva, Ignas Virbalas"
+output: pdf_document
+date: "2025-12-09"
+---
+
+```{r echo=FALSE, warning=FALSE, include = FALSE}
+# Uzkrauname paketus
+library(WDI)
+library(dplyr)
+library(ggplot2)
+library(GGally)
+library(patchwork)
+library(showtext)
+showtext_auto()
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) #sueikia formule ir nespausidina warningu i console
+```
+# Nagrinėjamo straipsnio aprašymas
+
+## Pavadinimas
+
+“Impact of energy consumption and economic growth on CO2 emission using multivariate regression”
+
+## Nuoroda į straipsnį
+
+<https://www.sciencedirect.com/science/article/pii/S2211467X19301208>
+
+## Straipsnio autoriai
+
+Mostafa K. Ardakani, Seyed Mohsen Seyedaliakbar
+
+## Žurnalo pavadinimas
+
+Energy Strategy Reviews, Volume 26, 2019. Nuoroda į žurnalą: <https://www.sciencedirect.com/journal/energy-strategy-reviews/vol/26/suppl/C>.
+
+------------------------------------------------------------------------
+
+# Tyrimo tikslai:
+
+-   Ištirti sąryšį tarp energijos suvartojimo, ekonominio augimo ir CO2 emisijos EKC kontekste naudojant multivariacinę regresijos metodiką.
+-   Tyrime analizuojamos septynios valstybės Vidurio Rytų ir Šiaurės Afrikos regione, kurios pasižymi gausiais naftos ištekliais.
+
+## Tyrimo uždaviniai:
+
+-   Panaudoti multivariacinę tiesinę regresijos metodika tam, kad būtų patvirtinta EKC hipotezė atliekamo tyrimo kontekste.\
+-   Pateikti atlikto tyrimo išvadas ir pasiūlymus remiantis gautais rezultatais.
+
+## Straipsnio tyrime naudoti duomenys:
+
+-   Duomenys surinkti iš World Bank Development Indicators, WDI. Filtruotas 1995 – 2014 metų laikotarpis, atrinktos 7 valstybės: Alžyras, Bahrainas, Iranas, Kuveitas, Omanas, Kataras ir Saudo Arabija. Pasirinkti valstybių kintamieji nurodytam periodui: CO2 emisijos (metrinės tonos vienam gyventojui), elektros energijos suvartojimas EPC (kWh vienam gyventojui) ir BVP vienam gyventojui (US\$).
+
+## Mokslinio straipsnio autorių atliktos analizės metodai:
+
+------------------------------------------------------------------------
+
+### Modelio formulavimas ir diskriptyvinė analizė
+
+Moksliniame straipsnyje, naudojant duomenis iš WDI duomenų bazės, CO$_2$ išmetimui taikoma tokia kvadratinė lygtis (kvadratinė regresija): $$
+\ln(\text{CO}_{2,it}) = b_{0i} + b_{1i} \cdot \ln(\text{EPC}_{it}) + b_{2i} \cdot \ln(\text{GDP}_{it}) + b_{3i} \cdot \left[\ln(\text{GDP}_{it})\right]^2 + \varepsilon_{it}
+$$ EKC hipotezė tirta naudojant scenarijus, susijusius su BVP ir CO$_2$ išmetimu:
+
+-   
+
+    (a) kai $b_{2i} \neq 0$ ir $b_{3i} < 0$\
+        (gaunamas apverstas U formos ryšys tarp BVP ir CO$_2$ išmetimų)
+
+-   
+
+    (b) kai $b_{2i} \neq 0$ ir $b_{3i} > 0$\
+        (gaunamas U formos ryšys tarp BVP ir CO$_2$ išmetimų)
+
+(a) atveju emisijos didėja iki tam tikro pajamų lygio (lūžio taško: $-\frac{0.5 b_{2i}}{b_{3i}}$), o vėliau mažėja.\
+(b) atveju – atvirkščiai.
+
+Diskriptyvinei analizei panaudota lentelė su duomenų padėties charakteristikomis (vidurkis, standartinis nuokrypis, maksimalios ir minimalios reikšmės), boxplot, scatter, time series grafikai ir histogramos.
+
+Lentelės rodo didelius skirtumus tarp šalių energijos vartojimo ir CO$_2$ emisijų (pagal vidurkius išsiskiria Bahreinas ir Kataras dėl savo didelių EPC ir CO$_2$ lygių).
+
+Analizuodami boxplot grafikus autoriai pastebi, kad didesni EPC ir BVP rodikliai paprastai lemia CO$_2$ padidėjimą.
+
+Laiko eilučių grafikuose vaizduojami $LnCO_2$, $LnEPC$ ir $LnGDP$ kiekvienoje šalyje 1995–2014 m. Pastebima 2008 m. recesija visose šalyse, tačiau bendros išvados, tenkinančios visas šalis, padaryti negalima dėl skirtingų CO$_2$ augimo tendencijų.
+
+------------------------------------------------------------------------
+
+### Daugiamatė regresinė analizė
+
+Tiriant CO$_2$ emisijos ryšį su vienam gyventojui tenkančiu energijos suvartojimu, BVP ir $BVP^2$, septynioms MENA šalims 1995–2014 m. taikoma daugiamatė tiesinė regresija.
+
+Aiškinamieji kintamieji: $LnEPC$, $LnGDP$, $(LnGDP)^2$.\
+Modelio tinkamumas: $R^2 = 0.99$, $F = 545$, vidutinė santykinė paklaida 1.8–4.7 %.
+
+Šalys suskirstytos:
+- U formos kategorija: Alžyras, Bahreinas.\
+- Apverstos U formos kategorija (patvirtinta EKC hipotezė): Omanas, Kataras, Saudo Arabija.\
+- Neapibrėžti rezultatai: Iranas, Kuveitas.
+
+------------------------------------------------------------------------
+
+### Daugiamatės regresijos prielaidos:
+
+Autoriai tikrina daugiamatės linijinės regresijos prielaidas su tikslu išvengti klaidingų išvadų. Tikrinamos šios prielaidos: daugiamatis normalumas, autokoreliacija, homoskedastiškumas ir kolineariškumas. Visi testai yra atlikti grafiškai.
+
+## Straipsnio tyrimo išvados:
+
+Apibendrinus, straipsnio autoriai pastebi, jog Omanas, Kataras ir Saudo Arabija skaičiavimų eigoje įgauna apverstos U-formos kreives. Šioms valstybėms turint mažesnę GDP reikšmę, nei jų lūžio taškas, ekonominis augimas lemia didesnes Co2 emisijas, tačiau GDP reikšmei tapus aukštesnei nei lūžio taško reikšmei – aplinkos kokybė gerėja kartu su ekonominiu augimu. Alžyras ir Bahreinas tyrimo eigoje įgauna U-formos kreives. Tai reiškia, kad GDP reikšmei tapus aukštesnei, nei jos lūžio taškas, ekonominis augimas lemia didesnes Co2 emisijas. Atitinkamai, straipsnio autoriai siūlo tinkamos ekonomikos ir socialinės politikos taikymą šioms valstybėms tam, kad būtų sumažintos Co2 emisijos, tuo pačiu metu gerinant ekonomikos augimą. Taip pat, rezultatai Iranui ir Kuveitui yra neapibrėžti. Šiuo atveju, straipsnio autoriai rekomenduoja pakeisti taikomus statistinius metodus, arba itraukti papildomus nepriklausomus kintamuosius, kurie suteiktų galimybę gauti tikslesnį rezultatą.
+
+------------------------------------------------------------------------
+
+# Darbas:
+
+Nagrinėti duomenys:
+
+Šaltinis: World Bank Development Indicators, WDI. Duomenys iš WDI buvo tiesiogiai įkelti į R aplinką naudojant WDI paketą.
+
+Struktūra: Surinkti duomenys apima 7 valstybes: Alžyrą, Bahreiną, Iraną, Kuveitą, Omaną, Katarą ir Saudo Arabiją. Filtruotas laikotarpis: 1995-2014 metai. Pasirinkti kintamieji: GDP per capita (current US), Carbon dioxide (CO2) emissions excluding LULUCF per capita (t CO2ecapita), Electric power consumption (kWh per capita). Kiekviena eilutė atitinka šalį ir konkretų laikotarpį.
+
+Dažnis: Metiniai duomenys.
+
+Reikšmių matavimai:
+
+GDP per capita (current US\$) – matuojamas JAV doleriais vienam žmogui.
+
+Carbon dioxide (CO2) emissions excluding LULUCF (Land use, Land-use change and Forestry) per capita (t CO2e/capita) – CO2 emisijos, atskaičius žemės naudojimą, žemės naudojimo pokyčius ir miškininkystę, matuojamos tonomis vienam žmogui. Pasirinkome šį rodiklį, todėl nes WDI nebeteikia galimybės naudoti paprasto CO2 per capita rodiklio.
+
+Electric power consumption (kWh per capita) – Elektros energijos suvartojimas, matuojamas kilovatvalandėmis vienam gyventojui.
+
+Taikyti statistiniai metodai:
+
+Duomenų reikšmių pavertimas į natūrinio logaritmo reikšmes, taikytos empirinės charakteristikos (standartinis nuokrypis, mediana, min, max), atlikta išskirčių analizė (nubraižyti boxplot grafikai), nubraižyti trend, scatterplot, qq-plot grafikai. Nubraižytas regresijos modelio grafikas, pateikta jo ataskaita. Taip pat įtraukta koreliacijos lentelė.
+
+```{r, echo=FALSE}
+MENA <- WDI(country = c('DZ', 'BH', 'IR', 'KW', 'OM', 'QA', 'SA'), indicator = c("EN.GHG.CO2.PC.CE.AR5", "NY.GDP.PCAP.CD", "EG.USE.ELEC.KH.PC"), start = 1995, end = 2014)
+MENA <- rename(MENA, 'CO2 emission' =	'EN.GHG.CO2.PC.CE.AR5' , 'GDP per capita' = 'NY.GDP.PCAP.CD', 'EPC - Electric Power Consumption' = 'EG.USE.ELEC.KH.PC')
+MENA$country[MENA$country == "Iran, Islamic Rep."] <- "Iran"
+MENA <- select(MENA, country, year, `CO2 emission`, `GDP per capita`, `EPC - Electric Power Consumption`)
+```
+
+```{r, echo=FALSE}
+empir <- MENA %>%
+  mutate(`Ln(CO2)` = log(`CO2 emission`), `Ln(EPC)` = log(`EPC - Electric Power Consumption`), `Ln(GDP)` = log(`GDP per capita`))%>%
+  group_by(country) %>%
+  summarise(
+    mean_LnCO2 = round(mean(`Ln(CO2)`), 2),
+    std_LnCO2 = round(sd(`Ln(CO2)`), 2),
+    min_LnCO2 = round(min(`Ln(CO2)`), 2),
+    max_LnCO2 = round(max(`Ln(CO2)`), 2),
+    
+    mean_LnEPC = round(mean(`Ln(EPC)`), 2),
+    std_LnEPC = round(sd(`Ln(EPC)`), 2),
+    min_LnEPC = round(min(`Ln(EPC)`),2),
+    max_LnEPC = round(max(`Ln(EPC)`), 2),
+    
+    mean_LnGDP = round(mean(`Ln(GDP)`), 2),
+    std_LnGDP = round(sd(`Ln(GDP)`), 2),
+    min_LnGDP = round(min(`Ln(GDP)`), 2),
+    max_LnGDP = round(max(`Ln(GDP)`), 2)
+  )
+```
+
+```{r fig.height=3, fig.width=6, echo=FALSE}
+library(knitr)
+
+# Lentelė tik CO2 rodikliams
+empir_CO2 <- empir %>%
+  select(country, mean_LnCO2, std_LnCO2, min_LnCO2, max_LnCO2)
+
+kable(empir_CO2, caption = "MENA šalių Ln(CO2) aprašomoji statistika")
+
+# Lentelė tik EPC rodikliams
+empir_EPC <- empir %>%
+  select(country, mean_LnEPC, std_LnEPC, min_LnEPC, max_LnEPC)
+
+kable(empir_EPC, caption = "MENA šalių Ln(EPC) aprašomoji statistika")
+
+# Lentelė tik GDP rodikliams
+empir_GDP <- empir %>%
+  select(country, mean_LnGDP, std_LnGDP, min_LnGDP, max_LnGDP)
+
+kable(empir_GDP, caption = "MENA šalių Ln(GDP) aprašomoji statistika")
+```
+Pateiktose aprašomosios statistikos lentelėse galime matyti vidurkį, standartinį nuokrypį, kintamųjų minimumo ir maksimumo reikšmes. Stebiniai yra surinkti per 20 metų duomenų.
+
+```{r fig.height=6, fig.width=6, echo=FALSE}
+MENA <- mutate(MENA, `Ln(CO2)` = log(`CO2 emission`), `Ln(EPC)` = log(`EPC - Electric Power Consumption`), `Ln(GDP)` = log(`GDP per capita`))
+bxplt_CO2 <- ggplot(MENA, mapping = aes(x = country, y = `Ln(CO2)`))+
+  geom_boxplot(
+    color = 'blue',
+    fill = 'white',
+    outlier.colour = 'red',
+    outlier.shape = 3,
+    outlier.size = 2
+    )+
+  labs(
+    x = "Country",
+    y = "Ln(CO2)",
+    title = "Natūralusis logaritmas \nnuo CO2 emisijų"
+  )+
+  theme_bw()
+library(dplyr)
+```
+
+```{r fig.height=6, fig.width=6, echo=FALSE}
+bxplt_EPC <- ggplot(MENA, mapping = aes(x = country, y = `Ln(EPC)`))+
+  geom_boxplot(
+    color = 'blue',
+    fill = 'white',
+    outlier.colour = 'red',
+    outlier.shape = 3,
+    outlier.size = 2
+  )+
+  labs(
+    x = 'Country',
+    y = 'Ln(EPC)',
+    title = 'Natūralusis logaritmas \nnuo EPC'
+  )+
+  theme_bw()
+
+```
+
+```{r fig.height=6, fig.width=6, echo=FALSE}
+bxplt_GDP <- ggplot(MENA, mapping = aes(x = country, y = `Ln(GDP)`))+
+  geom_boxplot(
+    color = 'blue',
+    fill = 'white',
+    outlier.colour = 'red',
+    outlier.shape = 3,
+    outlier.size = 2
+  )+
+  labs(
+    x = 'Country',
+    y = 'Ln(GDP)',
+    title = 'Natūralusis logaritmas \nnuo BVP'
+  )+
+  theme_bw()
+
+```
+
+```{r fig.height=4.5, fig.width=9, echo=FALSE}
+bxplt_CO2 <- bxplt_CO2 + labs(caption = "Graf. 1")
+bxplt_EPC <- bxplt_EPC + labs(caption = "Graf. 2")
+
+((bxplt_CO2 | bxplt_EPC))
+```
+```{r fig.height=4.5, fig.width=9, echo=FALSE}
+bxplt_GDP <- bxplt_GDP + labs(caption = "Graf. 3")
+(bxplt_GDP | plot_spacer())
+```
+Viršuje vaizduojami grafikai atitinkamai vaizduoja LnCO2, LnEPC, LnGDP boxplot'us sugrupuotus pagal valstybes. Graf. 2 pastebime išskirtį ties Saudo Arabijos reikšme. Grafikai tik vizualiai parodo kintamųjų skirstinius, tačiau drąsesnių teiginių apie priežastingumą tarp kintamųjų daryti negalime. Ką tik minėtus kategoriškus teiginius apie dviejų kintamųjų priežastingumą pastebime straipsnio autorių atlikto tyrimo rezultatuose. Autoriai pateikia tris LnCO2, LnEPC, LnGDP grafikus, kuriuose boxplot'ai yra sugrupuoti pagal valstybes. Apžvelgę savo grafikų rezultatus, jie teigia, kad "Pirmame ir antrame grafike galime matyti, jog aukštesnė EPC reikšmė dažniausiai nulemia CO2 augimą, tačiau toks teiginys yra priešingas Bahreino ir Kataro atvejams. Pirmame ir trečiame grafike galime pastebėti, jog CO2 augimas yra nulemtas BVP augimo.". Toks teiginys nėra metodiškai tikslus, nes boxplot grafikai neparodo priežastingumo tarp dviejų kintamųjų, tą įrodyti reiktų pasitelkiant regresinę analizę.
+
+```{r fig.height=3, fig.width=6, echo=FALSE, fig.align='center'}
+pasiskirst_CO2 <- ggplot(MENA, mapping = aes(x = year, y = `Ln(CO2)`, shape = country))+
+  geom_point()+
+  scale_shape_manual(values = c(1, 2, 3, 4, 5, 6, 7)) +
+  labs(
+    x = 'year',
+    y = 'Ln(CO2)',
+    title = 'Naturalusis logaritmas \nnuo CO2 emisiju pagal metus'
+  ) + theme_bw() +
+  theme(
+    plot.title = element_text(size = 8)
+  )
+```
+
+```{r fig.height=3, fig.width=6, echo=FALSE}
+pasiskirst_EPC <- ggplot(MENA, mapping = aes(x = year, y = `Ln(EPC)`, shape = country))+
+  geom_point()+
+  scale_shape_manual(values = c(1, 2, 3, 4, 5, 6, 7)) +
+  labs(
+    x = 'year',
+    y = 'Ln(EPC)',
+    title = 'Naturalusis logaritmas \nnuo EPC suvartojimo pagal metus'
+  ) + theme_bw() +
+  theme(
+    plot.title = element_text(size = 8)
+  )
+```
+
+```{r fig.height=3, fig.width=6, echo=FALSE}
+pasiskirst_GDP <- ggplot(MENA, mapping = aes(x = year, y = `Ln(GDP)`, shape = country))+
+  geom_point()+
+  scale_shape_manual(values = c(1, 2, 3, 4, 5, 6, 7)) +
+  labs(
+    x = 'year',
+    y = 'Ln(GDP)',
+    title = 'Naturalusis logaritmas \nnuo BVP pagal metus'
+  ) + theme_bw() +
+  theme(
+    plot.title = element_text(size = 8)
+  )
+```
+
+```{r fig.height=10, fig.width=5, echo=FALSE, fig.align='center'}
+pasiskirst_CO2 <- pasiskirst_CO2 + labs(caption = "Graf. 4")
+pasiskirst_EPC <- pasiskirst_EPC + labs(caption = "Graf. 5")
+pasiskirst_GDP <- pasiskirst_GDP + labs(caption = "Graf. 6")
+pasiskirst_CO2 / pasiskirst_EPC / pasiskirst_GDP
+```
+Grafikuose 4-6 matome EPC, GDP IR CO2 natūrinio logaritmo reikšmes pagal valstybes. Duomenys atrinkti nuo 1995 iki 2014. Pastebime, kad Kataro bei, valstybės, kurios nepamini autoriai, Kuveito CO2 reikšmės nėra tolygiai augančios filtruotu laikotarpiu: jos iš esmės lieka tolygios.
+
+```{r fig.height=3, fig.width=6, echo=FALSE}
+scatter_epc <- ggplot(MENA, mapping = aes(x = `Ln(EPC)`, y = `Ln(CO2)`))+
+  geom_point()+
+  labs(
+    y = 'CO2 emissions',
+    title = "Duomenų sklaidos grafikas"
+  ) + theme_bw() +
+  theme(
+    plot.title = element_text(size = 8)
+  )
+```
+
+```{r fig.height=3, fig.width=6, echo=FALSE}
+scatter_gdp <- ggplot(MENA, mapping = aes(x = `Ln(GDP)`, y = `Ln(CO2)`))+
+  geom_point()+
+  labs(
+    y = 'CO2 emissions',
+    title = "Duomenų sklaidos grafikas"
+  ) + theme_bw() +
+  theme(
+    plot.title = element_text(size = 8)
+  )
+```
+
+```{r fig.height=7.5, fig.width=4.5, echo=FALSE, fig.align='center'}
+scatter_epc <- scatter_epc + labs(caption = "Graf. 7")
+scatter_gdp <- scatter_gdp + labs(caption = "Graf. 8")
+scatter_epc / scatter_gdp
+```
+Grafikai 7-8 vaizduoja duomenų sklaidą. Duomenys atrinkti per 20 metų. Grafikas 7 vaizduoja CO2 emisijų nuo EPC priklausomybę, pastebime, kad EPC didėjant - didėja ir CO2 reikšmės. O grafikas 8 - CO2 nuo BVP, ižvelgiame, kad bendrai CO2 emisijos didina BVP reikšmes.
+```{r fig.height=3, fig.width=6, echo=FALSE}
+# Pakrovimas
+library(WDI)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+
+# 1. Duomenų atsisiuntimas ir paruošimas
+MENA <- WDI(
+  country = c('DZ', 'BH', 'IR', 'KW', 'OM', 'QA', 'SA'),
+  indicator = c("EN.GHG.CO2.PC.CE.AR5", "NY.GDP.PCAP.CD", "EG.USE.ELEC.KH.PC"),
+  start = 1995, end = 2014
+) %>%
+  rename(
+    'CO2 emission' = 'EN.GHG.CO2.PC.CE.AR5',
+    'GDP per capita' = 'NY.GDP.PCAP.CD',
+    'EPC - Electric Power Consumption' = 'EG.USE.ELEC.KH.PC'
+  ) %>%
+  select(country, year, `CO2 emission`, `GDP per capita`, `EPC - Electric Power Consumption`) %>%
+  mutate(
+    `Ln(CO2)` = log(`CO2 emission`),
+    `Ln(EPC)` = log(`EPC - Electric Power Consumption`),
+    `Ln(GDP)` = log(`GDP per capita`)
+  )
+
+# 2. Funkcija QQ plotui su pasikliovimo intervalais
+create_qq <- function(x, title, ribbon_fill = "black") {
+  x_sorted <- sort(x)
+  n <- length(x_sorted)
+  p <- ppoints(n)
+  mu <- mean(x_sorted, na.rm = TRUE)
+  sigma <- sd(x_sorted, na.rm = TRUE)
+  q_theory <- qnorm(p, mean = mu, sd = sigma)
+  f_q <- dnorm(q_theory, mean = mu, sd = sigma)
+  se <- sigma / (f_q * sqrt(n))
+  upper <- q_theory + 1.96 * se
+  lower <- q_theory - 1.96 * se
+  
+  df <- data.frame(
+    theory = q_theory,
+    y = x_sorted,
+    upper = upper,
+    lower = lower
+  )
+  
+  ggplot(df, aes(x = theory)) +
+    geom_ribbon(aes(ymin = lower, ymax = upper), fill = ribbon_fill, alpha = 0.2) +
+    geom_point(aes(y = y)) +
+    geom_abline(intercept = 0, slope = 1, color = "red") +
+    theme_bw() +
+    labs(title = title, x = "Teoriskai idealūs duomenys", y = title)
+}
+
+# 3. Sukuriame QQ plotus
+qq_CO2 <- create_qq(MENA$`Ln(CO2)`, "QQ-plot CO2", ribbon_fill = "black")
+qq_EPC <- create_qq(MENA$`Ln(EPC)`, "QQ-plot EPC", ribbon_fill = "black")
+qq_GDP <- create_qq(MENA$`Ln(GDP)`, "QQ-plot GDP", ribbon_fill = "grey")
+
+```
+
+```{r fig.height=10, fig.width=5, echo=FALSE, fig.align='left'}
+qq_CO2 <- qq_CO2 + labs(caption = "Graf. 9")
+qq_EPC <- qq_EPC + labs(caption = "Graf. 10")
+qq_GDP <- qq_GDP + labs(caption = "Graf. 11")
+
+qq_CO2 / qq_EPC / qq_GDP
+```
+Grafikai 9-11 vaizduoja LnCO2, LnEPC ir LnGDP kintamųjų QQ-Plot grafikus. Matome, kad duomenys yra normaliai pasiskirstę visuose grafikuose, tačiau dėl per didelio duomenų kieko negalime kategoriškai teigti, jog empiriniai duomenys yra tikslūs.
+
+```{r fig.height=8, fig.width=9, echo=FALSE}
+logaritmai <- MENA %>%
+  mutate(ln_CO2 = log(`CO2 emission`), ln_EPC = log(`EPC - Electric Power Consumption`), ln_GDP = log(`GDP per capita`))
+logaritmai$ln_GDP2 <- logaritmai$ln_GDP^2
+
+ekc_model <- lm(
+  ln_CO2 ~ ln_GDP + ln_GDP2 + ln_EPC,
+  data = logaritmai
+)
+```
+
+```{r fig.height=10, fig.width=9.5, echo=FALSE}
+lgg <- ggplot(logaritmai, aes(x = ln_GDP, y = ln_CO2)) +
+  geom_point(aes(color = country), alpha = 0.5) +
+  stat_smooth(
+    method = "lm",
+    formula = y ~ x + I(x^2),
+    se = TRUE,
+    color = "black"
+  ) +
+  labs(
+    title = "EKC ryšys tarp BVP ir CO2 emisijų",
+    x = "ln(GDP per capita)",
+    y = "ln(CO2 emissions per capita)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 10)
+  )
+
+```
+
+```{r fig.height=7.1, fig.width=6.3, echo=FALSE, fig.align='left'}
+lgg <- lgg + labs(caption = "Graf. 12")
+lgg
+```
+Graf. 12 pateiktas lnCO2 ~ lnGDP + lnGDP^2 + lnEPC regresijos modelio grafikas. Analizuojant grafiką svarbu paminėti, jog EKC hipotezė čia nėra įrodoma, ar paneigiama. Grafikas parodo nagrinėjamų MENA valstybių taškų išsidėstymą aplink teorinę regresijos liniją. Kaip ir Graf 8. sklaidos grafike pastebime, kad bendrai, negrupuojant taškų pagal valstybes, CO2 emisijos didina BVP reikšmes, tačiau prie išvadų susijusių su minėtos EKC hipotezės paneigimu ar patvirtinimu, vertinant specifines valstybes - neprieiname.
+
+```{r fig.height=12, fig.width=5, echo=FALSE}
+s <- summary(ekc_model)
+df <- as.data.frame(s$coefficients)
+kable(df, 
+      caption = "EKC modelio koeficientai",
+      digits = 3,        # suapvalina skaičius
+      format = "latex")  # jei PDF, LaTeX formatas
+```
+Viršuje matome Graf. 12 regresinio modelio ataskaitą, sukurtą pasitelkiant stargazer funkciją RStudio. Galime įžvelgti, jog F-statistika yra reikšminga, aukštas R kvadratas reiškia, kad modelis prognozuoja tiksliai. Taip pat matome, jog lnEPC kintamasis yra labai reikšmingas, tačiau remiantis atliktos ataskaitos rezultatais negalime teigti, jog lnGDP^2 ir lnGDP kintamieji yra reikšmingi. Tačiau norint tisliau įvertinti ar modelis prognozuoja tisliai, vertėtų įtraukti daugiau paklaidų vertinimo testų pvz.: Durbin - Wattson. 
+
+```{r fig.height=8, fig.width=9, echo=FALSE}
+library(dplyr)
+library(GGally)
+library(knitr)
+
+safe_cor_val <- function(data, var1, var2) {
+  sub <- data[, c(var1, var2)]
+  if (sum(complete.cases(sub)) > 1) {
+    return(round(cor(sub[[var1]], sub[[var2]], use = "complete.obs"), 3))
+  } else {
+    return(NA)
+  }
+}
+
+salys <- unique(logaritmai$country)
+
+corr_table <- data.frame(
+  country = salys,
+  CO2_GDP = sapply(salys, function(s) {
+    df <- logaritmai[logaritmai$country == s, ]
+    safe_cor_val(df, "ln_CO2", "ln_GDP")
+  }),
+  CO2_EPC = sapply(salys, function(s) {
+    df <- logaritmai[logaritmai$country == s, ]
+    safe_cor_val(df, "ln_CO2", "ln_EPC")
+  }),
+  GDP_EPC = sapply(salys, function(s) {
+    df <- logaritmai[logaritmai$country == s, ]
+    safe_cor_val(df, "ln_GDP", "ln_EPC")
+  })
+)
+
+# pašalinam eilutės vardus
+kable(corr_table, caption = "Koreliacijų lentelė pagal šalį", row.names = FALSE)
+
+```
+Table 4 vaizduojama valstybių ir LnGDP, LnCO2 ir LnEPC kintamųjų tarpusavio koreliacijų lentelė. Vertindami CO2 ir GDP kintamųjų tarpusavio koreliaciją galime įžvelgti, kad Alžyras, Iranas, Omanas, Saudo Arabija pasižymi aukšta koreliacija, tai rodo, kad bendru atveju GDP augimas lemia ir CO2 augimą. Kuveitas, Kataras pasižymi žemesne koreliacija, o Bahreinas - neigiama. Stebėdami CO2 - EPC kintamųjų tarpusavio koreliacija matome, kad Alžyras, Bahreinas, Iranas, Kuveitas, Omanas ir Saudo Arabija pasižymi aukštesne reikšme, o Kataras žemesne. GDP - EPC kintamųjų aukšta tarpusavio koreliacija pasižymi Alžyras, Iranas, Omanas, Kataras, Saudo Arabija. Žemesnė koreliacija yra pastebima ties Kuveito reikšme, o neigiama - Bahreino. Koreliacijos lentelė tik leidžia suskirstyti valstybes į grupes, bet priežastingumo tarp kintamųjų neparodo.
+
+------------------------------------------------------------------------
+
+# Potencialūs ateities tyrimai
+
+Šiame skyrelyje apžvelgsime ką būtų galima tyrinėti toliau/plačiau/ateityje, pritaikius galbūt kitą, sudėtingesnę metodiką:
+
+1) Vertėtų atsižvelgti į kitus veiksnius, kurie gali padaryti įtakos emisijoms, pvz. prekybos atvirumas, politinė situacija, nes galimai gavome tokius skirtingus rezultatus dėl šalių vidinių reikalų.
+2) Paimti didesnį kiekį šalių ir palyginti, pvz. to regiono skurdžias šalis su mūsų nagrinėtomis.
+3) Panašus į praeitą, bet įdomu būtų palyginti šio tyrimo rezultatus apie MENA šalis ir ES šalis.
+4) Pakartoti tyrimą pasirinkus kitą laikotarpį pvz.: nuo 2015 iki 2025. Taip pat turėti galvoje kitus veiksnius, kurie galėjo padaryti įtakos valstybių rezultatams.
+5) Pritaikyti kitą metodiką straipsnyje. Literatūroje randame taikomą STIRPAT metodiką (regresinė metodika, leidžianti statistiškai įvertinti, kaip gyventojų skaičius, ekonominė gerovė ir technologijos daro poveikį aplinkos degradacijai), būtų idomu panagrinėti rezultatus taikant ją.
+6) Atlikti daugiau paklaidų vertinimo testų. Panagrinėti Durbin - Wattson testus. Tai leistų tiksliau įvertinti ar regresijos modelis prognozuoja tiksliai.
+7) Įtraukti į analizę papildomų kintamųjų. Autorių apžvelgtoje literatūroje pastebime, jog atitinkamuose tyrimuose yra atliekama analizė įtraukiant atsinaujinančios energijos suvartojimo ir neatsinaujinančios energijos suvartojimo kintamuosius. Gauti rezultatai rodo, kad neatsinaujinančios energijos suvartojimas kartu su ekonominiu augimu padidina CO2 emisijų lygį, priešingai, nei atsinaujinančios energijos suvartojimas.
+8) Pratęsti tyrimą su tolimesne regresijos analize (analizuojamo straipsnio autoriai naudoja mvregress funkciją MatLab ir pateikia daugiakintamės tiesinės regresijos rezultatus, kuriais remdamiesi vėliau patvirtina, arba paneigia EKC) analizuojant EKC hipotezę.
+
+------------------------------------------------------------------------
+# Išvados:
+
+Pastebime, jog gauti atlikto darbo rezultatai turi panašumų su straipsnio autorių diskriptyvinės analizės metu gautais rezultatais: standartinio nuokrypio, vidurkio, min, max reikšmės daugelyje vietų sutampa, boxplot, time series, duomenų sklaidos grafikai daugelyje vietų atitinka straipsnio autorių grafikus. Taip pat pridedame papildomus QQ-Plot grafikus su tikslu patikrinti normalumą duomenyse. Pastebime, jog duomenys yra normaliai pasiskirstę, tačiau dėl didelio duomenų kiekio pries kategoriškos išvados neprieiname. Taip pat pridedame regresijos modelio grafiką ir ataskaitą, kuri daugelyje vietų pasako, jog modelis yra reikšmingas: F-statistika reikšminga, R kvadratas - aukštas, todėl modelis prognozuoja tiksliai, lnEPC kintamasis labai reikšmingas, ko negalime teigti apie likusius: lnGDP^2 ir lnGDP kintamuosius. Koreliacijos lentelėje pastebime, jog labai aukšta koreliacija tarp visų kintamųjų yra Alžyre, Irane, Omane, Saudo Arabijoje. Aukšta koreliacija nepasižymi Kataras ir Kuveitas. Bahreinas yra vienintelė šalis, kuri turi neigiamą koreliaciją tarp kintamųjų. Norint dar tiksliau patikrinti ar modelis prognozuoja tiksliai ir yra reikšmingas, vertėtų atlikti daugiau paklaidų vertinimo testų pvz.: Durbin-Wattson. Savo analizėje mes netikriname EKC hipotezės, tik atliekame regresinio modelio metodiką ir patikriname ar sukurtas regresijos modelis prognozuoja tiksliai. Norint patikrinti EKC hipotezę, reiktų atlikti sudetingesnę regresijos analizę (autoriai naudoja daugiakintę tiesinės regresijos metodiką) patikrinti. Taip pat verta paminėti, jog palyginę savo rezultatus su straipsnio autoriu gautais pastebime, jog mūsų R kvadratas yra žemesnis (0.935) nei autorių (0.99), tačiau F-statistika yra aukštesnė ~ 653, autorių - 545.
